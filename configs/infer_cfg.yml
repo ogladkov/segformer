@@ -1,0 +1,4 @@
+dataset_root: './disaster_ds_raw'
+model_type: 'nvidia/mit-b4'
+checkpoint_load_path: 'checkpoints/best_model_mit-b4_28_0.2617.pt'
+input_path: 'test_images/test0002.png'

@@ -1,0 +1,7 @@
+.idea
+**/__pycache__
+checkpoints
+disaster_ds_raw
+test_images
+
+./download_rf_dataset.py

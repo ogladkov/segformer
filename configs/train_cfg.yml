@@ -1,0 +1,7 @@
+dataset_root: './disaster_ds_raw'
+batch_size: 5
+num_epochs: 1
+lr: 0.00006
+model_type: 'nvidia/mit-b4'
+checkpoint_load_path: False
+checkpoint_save_path: 'checkpoints/best_model'
