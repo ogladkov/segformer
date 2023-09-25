@@ -66,40 +66,6 @@ def calculate_iou(pred, target, class_id):
     return iou  # Convert to a Python float
 
 
-# def drawMask(src, mask, color):
-#     cv2.imwrite('source.png', src)
-#     cv2.imwrite('mask.png', mask)
-#
-#     src = cv2.imread("source.png", -1)
-#     mask = cv2.imread("mask.png", -1)
-#
-#     # print(src.shape, mask.shape)
-#
-#     # convert mask to gray and then threshold it to convert it to binary
-#     gray = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
-#     ret, binary = cv2.threshold(gray, 40, 255, cv2.THRESH_BINARY)
-#
-#     # find contours of two major blobs present in the mask
-#     contours,hierarchy = cv2.findContours(binary, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
-#
-#     # draw the found contours on to source image
-#     # color = (color[0],color[1],color[2])
-#     # print('Draw',color)
-#     for contour in contours:
-#         # cv2.drawContours(src, contour, -1, (255,0,0), thickness=cv2.FILLED)
-#         cv2.fillPoly(src, pts =[contour], color=(int(color[0]),int(color[1]),int(color[2])))
-#
-#     # # split source to B,G,R channels
-#     # b,g,r = cv2.split(src)
-#
-#     # # add a constant to R channel to highlight the selected area in reed
-#     # r = cv2.add(b, 30, dst = b, mask = binary, dtype = cv2.CV_8U)
-#
-#     # # merge the channels back together
-#     # cv2.merge((b,g,r), src)
-#     return src
-
-
 def ade_palette():
     """Custom palette that maps each class to RGB values."""
     return [
@@ -118,76 +84,10 @@ def ade_palette():
         [0, 0, 128],
     ]
 
-# def visualizeMasks(seg, temp_image, shouldShowIntermediateClasses = False, fromDataset=False,
-#                    model=None, palette=ade_palette(), map=None):
-#     map = np.array(map).astype(np.uint8)
-#     palette = np.array(palette)
-#     classes_map = np.unique(map).tolist()
-#     unique_classes = [model.config.id2label[idx] if idx != 255 else None for idx in classes_map]
-#     print("Classes in this image:", unique_classes, classes_map)
-#     detected_classes= classes_map
-#     map_cpy = np.array(map).copy()
-#     updated_pallete  = []
-#
-#     for cls in detected_classes:
-#
-#         if(cls==0):
-#             continue
-#
-#         temp_map = map_cpy.copy()
-#         # temp_map = np.expand_dims(np.array(temp_map), axis=2)
-#         cls_name = model.config.id2label[cls]
-#         cls_color = palette[cls]
-#         B, G, R = cls_color
-#         colored_string = '\033[48;2;'+str(R)+';'+str(G)+';'+str(B)+'m'+str(cls_color)+'!\033[0m'
-#         print('Class Name:', cls_name, ', Class ID:', cls, ', Class Color:',colored_string )
-#         # color_seg[map == label, :] = palette[cls]
-#         # color_seg = color_seg[..., ::-1]
-#
-#         translate_bit = 0 if fromDataset else 1
-#         temp_map[temp_map==cls-translate_bit] = 255
-#         temp_map[temp_map!=255] = 0
-#
-#         if(len(np.unique(temp_map).tolist())==1):
-#             temp_map = map_cpy.copy()
-#             temp_map[temp_map==cls] = 255
-#             temp_map[temp_map!=255] = 0
-#
-#         # print(temp_map.shape, 'Shape', temp_image.shape)
-#         t = drawMask(np.array(temp_image), cv2.merge((temp_map,temp_map,temp_map)),palette[cls] )
-#         updated_pallete.append([cls_name, palette[cls]])
-#
-#         # temp_map = cv2.bitwise_not(temp_map)
-#
-#         # res = cv2.bitwise_and(temp_image, cv2.merge((temp_map,temp_map,temp_map)))
-#         # # print(temp_image[temp_map==255])
-#         # res[temp_map==0]=255
-#
-#         # final = alphaBlendImages(cv2.addWeighted(res, 0.5, temp_image, 0.5, 0.0), temp_image, temp_map)
-#
-#         r = cv2.addWeighted(t, 0.5, np.array(temp_image), 0.5, 0.0)
-#         temp_image = r
-#         if(shouldShowIntermediateClasses):
-#             # temp_image = temp_image.astype(np.uint8)
-#             # plt.figure(figsize=(15, 10))
-#             # plt.imshow(temp_image)
-#             # plt.show()
-#
-#             plt_img = temp_image.copy()
-#             plt_img = plt_img[..., ::-1]
-#             # cv2_imshow_temp(temp_image)
-#             img = plt_img.astype(np.uint8)
-#             plt.figure(figsize=(15, 10))
-#             plt.imshow(img)
-#             plt.show()
-#
-#     return temp_image, updated_pallete, detected_classes
-
 
 def plot_loss(mode, pixelwise_accuracies, losses):
     plt.figure(figsize=(10, 5))
-    plt.plot(range(1, len(pixelwise_accuracies) + 1), pixelwise_accuracies,
-             label=f'{mode} Pixel-wise Accuracy')
+    plt.plot(range(1, len(pixelwise_accuracies) + 1), pixelwise_accuracies, label=f'{mode} Pixel-wise Accuracy')
     plt.plot(range(1, len(losses) + 1), losses, label=f'{mode} Loss')
     plt.xlabel('Epoch')
     plt.ylabel('Value')
@@ -205,9 +105,6 @@ class IoUTable:
         self.label2id = {v: k for k, v in cls_dict.items()}
         self.cumulative_iou_values_per_class = {class_name: 0.0 for class_name in self.id2label.values()}
         self.val_iou_per_class_epoch = {class_name: [] for class_name in self.id2label.values()}
-
-    # def reinit_epoch_placeholder(self):
-    #     self.val_iou_per_class_epoch = {class_name: [] for class_name in self.id2label.values()}
 
     def get_val_iou_per_class_epoch(self, predicted, labels):
 
