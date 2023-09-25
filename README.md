@@ -21,7 +21,7 @@ checkpoint_save_path - path for saving the best model after the training process
 
 ## Inference
 * Setup configuration file for training: ```./config/infer_cdf.yml``` (description of parameters is below)
-* * Run ```python inference.py```
+* Run ```python inference.py```
 
 ```
 dataset_root - root folder of your dataset
